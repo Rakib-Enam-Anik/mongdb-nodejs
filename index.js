@@ -54,26 +54,20 @@ app.get("/",(req,res) => {
     res.send("welcome to home page");
 });
 
+// CRUD - Create, Read, Update, Delete
+
+//create
 app.post("/products", async (req, res) => {
     try {
         
-        //const newProduct = new Product ({
-            //title : req.body.title,
-            //price : req.body.price,
-            //description : req.body.description,
-        const produtData = await Product.insertMany([
-            {
-                "title" : "iphone 5",
-                price: 250,
-                description: "beautiful phone"
-            },
-            {
-                "title" : "iphone 4",
-                price: 200,
-                description: "beautiful phone"
-            }
+        const newProduct = new Product ({
+            title : req.body.title,
+            price : req.body.price,
+            description : req.body.description,
+    
 
-        ]);
+    });
+
        const productData = await newProduct.save();
 
         res.status(201).send({productData});
@@ -83,3 +77,27 @@ app.post("/products", async (req, res) => {
     }
 });
 
+app.get("/products", async (req, res) => {
+    try {
+        const products = await Product.find();
+        if(products){
+            res.status(200).send(products);
+         }else{
+            res.status(404).send({
+                message: "products not fond",
+            });
+         }
+    } catch (error){
+        res.status(500).send({ message: error.message });
+    }
+});
+
+
+//Database -> collections -> document
+
+//POST: /products-> create a pproduct
+//GET: /products -> Return all products
+//GET: /products -> return a specific product
+
+//put: /products/:id ->update a product based on id
+//Delete: /products/:id-> delete a product based on id
