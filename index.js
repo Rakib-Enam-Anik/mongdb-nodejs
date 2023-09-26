@@ -79,11 +79,15 @@ app.post("/products", async (req, res) => {
 
 app.get("/products", async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().limit(2);
         if(products){
-            res.status(200).send(products);
+            res.status(200).send({ 
+                success : true,
+                message : "return all product",
+                data : product});
          }else{
             res.status(404).send({
+                success: false,
                 message: "products not fond",
             });
          }
@@ -91,6 +95,31 @@ app.get("/products", async (req, res) => {
         res.status(500).send({ message: error.message });
     }
 });
+
+//products/111484848
+app.get("/products/:id", async (req, res) => {
+    try {
+
+        const id = req.params.id;
+        const products = await Product.findOne({_id: id});
+        if(products){
+            res.status(200).send({
+                success : true,
+                message : "return single product",
+                data : product
+            });
+         }else{
+            res.status(404).send({
+                success: false,
+                message: "product not fond",
+            });
+         }
+    } catch (error){
+        res.status(500).send({ message: error.message });
+    }
+});
+
+
 
 
 //Database -> collections -> document
